@@ -11,6 +11,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -25,13 +26,17 @@ public class CreateShipDao implements CreateShipOrderDao {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
+
     @Override
     public DockOrder saveDockOrder(Weapons weaponFk, Shields shieldFk, Empires empireFk,
                                    Hulls hullFk, List<Missiles> missileOptions,
                                    BigDecimal parsecks) {
 
-
         SqlParams params = generateInsertSql(weaponFk, shieldFk, empireFk, hullFk, parsecks);
+
+        UUID uuid = UUID.randomUUID();
+
+        SqlParams paramsUUID = new SqlParams();
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -39,13 +44,22 @@ public class CreateShipDao implements CreateShipOrderDao {
 
         Long orderPk = Objects.requireNonNull(keyHolder.getKey()).longValue();
 
+        paramsUUID.sql = "UPDATE dock_order set some_key = :some_key WHERE dock_id = :dock_id";
+
+        String identifier = uuid.toString();
+        paramsUUID.source.addValue("some_key", identifier);
+        paramsUUID.source.addValue("dock_id", keyHolder.getKey());
+
+        jdbcTemplate.update(paramsUUID.sql,paramsUUID.source,keyHolder);
+
         saveOptions(missileOptions, orderPk);
 
-        return DockOrder.builder().weaponFk(weaponFk).shieldFk(shieldFk)
-                .empireFk(empireFk).hullFk(hullFk)
+        return DockOrder.builder().message("hold onto your order key so you can update your order").orderKey(identifier).empireFk(empireFk).weaponFk(weaponFk).shieldFk(shieldFk)
+                .hullFk(hullFk)
                 .missileOptions(missileOptions).parsecks(parsecks)
                 .build();
     }
+
 
 
     private void saveOptions(List<Missiles> options, Long orderPK) {
@@ -55,11 +69,6 @@ public class CreateShipDao implements CreateShipOrderDao {
         }
     }
 
-    /**
-     * @param option
-     * @param orderPK
-     * @return
-     */
     private SqlParams generateInsertSql(Missiles option, Long orderPK) {
         SqlParams params = new SqlParams();
 
@@ -85,13 +94,16 @@ public class CreateShipDao implements CreateShipOrderDao {
                 + "INSERT INTO dock_order ("
                 + "weapon_FK, shield_FK, empire_id, hull_id, parsecks"
                 + ") VALUES ("
-                + ":weapon_Fk, :shield_Fk, :empire_id, :hull_id, :parsecks"
+                + ":weapon_Fk, :shield_Fk, :empire_id, :hull_id,:parsecks"
                 + ")";
         // @formatter:on
+
+
 
         SqlParams params = new SqlParams();
 
         params.sql = sql;
+
         params.source.addValue("weapon_Fk", weaponFk.getWeaponId());
         params.source.addValue("shield_Fk", shieldFk.getShieldId());
         params.source.addValue("empire_id", empireFk.getEmpireId());
@@ -118,11 +130,13 @@ public class CreateShipDao implements CreateShipOrderDao {
         // @formatter:on
 
         for (int index = 0; index < missileId.size(); index++) {
+            //122-123 line creates the Key for the Param Map
             String key = "missile_" + index;
             sql += ":" + key + ", ";
+            //This line inserts a key: value pair into the map.
+            // The Value is whatever Object is at the index of the param List.
             params.put(key, missileId.get(index));
         }
-
         sql = sql.substring(0, sql.length() - 2);
         sql += ")";
 
@@ -149,17 +163,10 @@ public class CreateShipDao implements CreateShipOrderDao {
         Map<String, Object> params = new HashMap<>();
         params.put("empire_name", empireId);
 
-        return Optional.of((Empires) jdbcTemplate.query(sql, params, (rs, rowNum) -> Empires.builder()
-                .empireId(rs.getInt("empire_id"))
-                .empireName(rs.getString("empire_name"))
-                .sector(rs.getString("sector"))
-                .alliance(rs.getString("alliance"))
-                .build()));
+        return Optional.ofNullable((jdbcTemplate.query(sql, params, new EmpireResultSetExtractor())));
     }
 
-    /**
-     *
-     */
+
     @Override
     public Optional<Hulls> fetchHulls(String hullId) {
         // @formatter:off
@@ -172,14 +179,7 @@ public class CreateShipDao implements CreateShipOrderDao {
         Map<String, Object> params = new HashMap<>();
         params.put("hull_name", hullId);
 
-        return Optional.of((Hulls) jdbcTemplate.query(sql, params, (rs, rowNum) -> Hulls.builder()
-                .hullId(rs.getInt("hull_id"))
-                .hullName(rs.getString("hull_name"))
-                .hullResilience(rs.getInt("hull_resilience"))
-                .energyRequirements(rs.getInt("energy_requirements"))
-                .combatSpeed(rs.getInt("combat_speed"))
-                .parsecks(rs.getBigDecimal("parsecks"))
-                .build()));
+        return Optional.ofNullable(( jdbcTemplate.query(sql, params, new HullsResultSetExtractor())));
     }
 
 
@@ -195,13 +195,7 @@ public class CreateShipDao implements CreateShipOrderDao {
         Map<String, Object> params = new HashMap<>();
         params.put("shield_type", shield_type);
 
-        return Optional.of((Shields)jdbcTemplate.query(sql, params, (rs,rowNum) -> Shields.builder()
-                .damageMitigation(rs.getInt("damage_mitigation"))
-                .energyRequirements(rs.getInt("energy_requirements"))
-                .parsecks(rs.getBigDecimal("parsecks"))
-                .shieldType(rs.getString("shield_Type"))
-                .shieldId(rs.getInt("shield_id"))
-                .build()));
+        return Optional.ofNullable(jdbcTemplate.query(sql, params, new ShieldsResultSetExtractor()));
     }
 
 
@@ -217,13 +211,7 @@ public class CreateShipDao implements CreateShipOrderDao {
         Map<String, Object> params = new HashMap<>();
         params.put("weapon_name", weapon_name);
 
-        return Optional.of((Weapons)jdbcTemplate.query(sql, params, (rs,rowNum) -> Weapons.builder()
-                .weaponId(rs.getInt("weapon_id"))
-                .weaponName(rs.getString("weapon_name"))
-                .energyRequirements(rs.getInt("energy_Requirements"))
-                .parsecks(rs.getBigDecimal("parsecks"))
-                .weaponDamage(rs.getInt("weapon_damage"))
-                .build()));
+        return Optional.ofNullable(jdbcTemplate.query(sql, params, new WeaponsResultSetExtractor()));
     }
 
 
@@ -262,7 +250,75 @@ public class CreateShipDao implements CreateShipOrderDao {
                 .build()));
     }
 
+    class WeaponsResultSetExtractor implements ResultSetExtractor<Weapons> {
+        @Override
+        public Weapons extractData(ResultSet rs) throws SQLException {
+            rs.next();
 
+            // @formatter:off
+            return Weapons.builder().weaponId(rs.getInt("weapon_id"))
+                    .weaponName(rs.getString("weapon_name"))
+                    .energyRequirements(rs.getInt("energy_Requirements"))
+                    .parsecks(rs.getBigDecimal("parsecks"))
+                    .weaponDamage(rs.getInt("weapon_damage"))
+                    .build();
+            // @formatter:on
+        }
+    }
+
+
+    class ShieldsResultSetExtractor implements ResultSetExtractor<Shields> {
+        @Override
+        public Shields extractData(ResultSet rs) throws SQLException {
+            rs.next();
+
+            // @formatter:off
+            return Shields.builder()
+                    .damageMitigation(rs.getInt("damage_mitigation"))
+                    .energyRequirements(rs.getInt("energy_requirements"))
+                    .parsecks(rs.getBigDecimal("parsecks"))
+                    .shieldType(rs.getString("shield_Type"))
+                    .shieldId(rs.getInt("shield_id"))
+                    .build();
+            // @formatter:on
+        }
+    }
+
+
+    class HullsResultSetExtractor implements ResultSetExtractor<Hulls> {
+        @Override
+        public Hulls extractData(ResultSet rs) throws SQLException {
+            rs.next();
+
+
+            return Hulls.builder()
+                    .hullId(rs.getInt("hull_id"))
+                    .hullName(rs.getString("hull_name"))
+                    .hullResilience(rs.getInt("hull_resilience"))
+                    .energyRequirements(rs.getInt("energy_requirements"))
+                    .combatSpeed(rs.getInt("combat_speed"))
+                    .parsecks(rs.getBigDecimal("parsecks"))
+                    .build();
+
+        }
+    }
+
+
+    class EmpireResultSetExtractor implements ResultSetExtractor<Empires> {
+        @Override
+        public Empires extractData(ResultSet rs) throws SQLException {
+            rs.next();
+
+            // @formatter:off
+            return Empires.builder() .empireId(rs.getInt("empire_id"))
+                    .empireName(rs.getString("empire_name"))
+                    .sector(rs.getString("sector"))
+                    .alliance(rs.getString("alliance"))
+                    .build();
+            // @formatter:on
+
+        }
+    }
 
 
     class SqlParams {

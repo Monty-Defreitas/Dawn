@@ -8,7 +8,6 @@ import com.leonde.seconddawn.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -21,8 +20,8 @@ public class DefaultShipOrderService implements CreateShipOrderService{
     @Autowired
     CreateShipOrderDao createShipOrderDao;
     // TODO: 1/29/2022 Come back and delete createShipDao autowire if found to be obsolete.
-    @Autowired
-    CreateShipDao createShipDao;
+//    @Autowired
+//    CreateShipDao createShipDao;
 
     @Transactional
 

@@ -6,8 +6,10 @@ import com.leonde.seconddawn.service.CreateEmpireService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
 public class DefaultCreateController implements CreateEmpireController {
+
 @Autowired
     CreateEmpireService createEmpireService;
 
@@ -16,3 +18,4 @@ public class DefaultCreateController implements CreateEmpireController {
         return createEmpireService.createEmpire(createUser);
     }
 }
+

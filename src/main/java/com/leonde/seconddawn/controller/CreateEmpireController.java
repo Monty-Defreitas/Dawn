@@ -33,16 +33,13 @@ public interface CreateEmpireController {
                             content = @Content(mediaType = " Application/json")),
                     @ApiResponse(responseCode = "500",
                             description = "An unplanned error occured.",
-                            content = @Content(mediaType = " Application/json"))
-
-            },
+                            content = @Content(mediaType = " Application/json"))},
             parameters = {
                     @Parameter(name = "CreateUser", allowEmptyValue = false,
                             required = true,
-                            description = "The order as JSON"),
-            }
+                            description = "The order as JSON")})
 
-    )
+
     @PostMapping("/empire")
     @ResponseStatus(code = HttpStatus.CREATED)
     Empires registerEmpire(@RequestBody Empires createEmpire);

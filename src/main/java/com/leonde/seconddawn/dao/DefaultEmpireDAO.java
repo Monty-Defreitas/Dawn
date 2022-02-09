@@ -33,6 +33,7 @@ public class DefaultEmpireDAO implements CreateEmpireDao{
                 .build();
     }
 
+
     private SqlParams generateInsertEmpire(Empires createEmpire){
 
         SqlParams params = new SqlParams();

@@ -9,6 +9,5 @@ import java.util.List;
 @Builder
 public class MissileDockOrder {
    List<Missiles> missileIdFk;
-
     DockOrder dockOrderFk;
 }

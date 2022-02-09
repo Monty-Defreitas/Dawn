@@ -55,9 +55,19 @@ CREATE TABLE missiles (
                           primary key (missile_id)
 );
 
+CREATE TABLE ships (
+                        ship_pk int unsigned NOT NULL AUTO_INCREMENT,
+                        ship_id enum('INTERCEPTOR', 'CRUISER', 'DREADNAUGHT', 'BASE', 'WRANGLER') NOT NULL,
+                        trim_level varchar(40) NOT NULL,
+                        num_doors int NOT NULL,
+                        wheel_size int NOT NULL,
+                        base_price decimal(9, 2) NOT NULL,
+                        PRIMARY KEY (ship_pk)
+);
 
 CREATE TABLE dock_order (
                             dock_id int unsigned not null auto_increment,
+                            some_key varchar(100),
                             weapon_FK int unsigned not null,
                             shield_FK int unsigned not null,
                             empire_id int unsigned not null,
