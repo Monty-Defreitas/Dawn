@@ -8,14 +8,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
-@Data
 @Builder
-public class DockOrderRequest {
+@Data
+public class UpdateDockOrder {
 
     @NotNull
-    @Length(max = 30)
-    @Pattern(regexp = "[\\w\\s]*")
-    private String empireName;
+    @Length(max = 45)
+    private String orderKey;
 
     @NotNull
     @Length(max = 30)
@@ -32,5 +31,5 @@ public class DockOrderRequest {
     @Pattern(regexp = "[\\w\\s]*")
     private String weaponType;
 
-    private List<@NotNull @Length(max = 30) @Pattern(regexp = "[A-Z0-9_]*") String> missiles;
+//    private List<@NotNull @Length(max = 30) @Pattern(regexp = "[A-Z0-9_]*") Missiles> missiles;
 }

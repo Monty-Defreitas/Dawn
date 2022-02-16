@@ -1,31 +1,72 @@
 package com.leonde.seconddawn.dao;
 
 import com.leonde.seconddawn.entity.DockOrder;
+import com.leonde.seconddawn.entity.Hulls;
+import com.leonde.seconddawn.entity.Shields;
 import com.leonde.seconddawn.entity.Weapons;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.stereotype.Component;
 
-import java.util.UUID;
+import java.math.BigDecimal;
+import java.util.NoSuchElementException;
 
-public class UpdateOrderDao {
+@Component
+public class UpdateOrderDao extends CreateShipDao{
 
     @Autowired
    private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public DockOrder updateAndReturnUpdate(String identifier){
+    public DockOrder updateAndReturnUpdate(String identifier, Weapons weapons, Shields shields, Hulls hulls){
 
-        String sql = "UPDATE dock_order set weapon_FK = :weapon_fk WHERE some_key = :some_key";
+        String sql = "UPDATE dock_order set weapon_FK = :weapon_fk, " +
+                     "shield_FK  = :shield_fk, hull_id = :hull_id, " + " parsecks = :parsecks " +
+                     "WHERE some_key = :some_key";
 
-        UUID uuid = UUID.randomUUID();
-        String identifier2 = uuid.toString();
 
-        SqlParameterSource namedParameters = new MapSqlParameterSource("some_key", identifier);
-          jdbcTemplate.update(sql,namedParameters);
+        BigDecimal price = weapons.getParsecks().add(shields.getParsecks()).add(hulls.getParsecks());
 
-        return DockOrder.builder().build();
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+             namedParameters.addValue("some_key", identifier);
+             namedParameters.addValue("weapon_fk", weapons.getWeaponId());
+             namedParameters.addValue("shield_fk", shields.getShieldId());
+             namedParameters.addValue("hull_id", hulls.getHullId());
+             namedParameters.addValue("parsecks", price);
+
+
+          int status = jdbcTemplate.update(sql,namedParameters);
+
+            if (status != 1) {
+                throw new NoSuchElementException("This order does not exist for update");
+            }
+
+        System.out.println(status);
+
+        return DockOrder.builder().orderKey(identifier)
+                .weaponFk(weapons).shieldFk(shields)
+                .hullFk(hulls).parsecks(price).build();
     }
 
+   public String deleteOrder(String orderId) {
 
+        SqlStuff params = new SqlStuff();
+
+         params.sql = "DELETE from dock_order where some_key = :some_key";
+
+         params.namedParameter = new MapSqlParameterSource("some_key", orderId);
+
+         int status = jdbcTemplate.update(params.sql, params.namedParameter);
+
+        if(status != 0) {
+            return  "Order data deleted for ID " + orderId;
+       }else{
+           throw new NoSuchElementException("No Order found with ID " + orderId);
+        }
+}
+       class SqlStuff {
+       String sql;
+       SqlParameterSource namedParameter;
+        }
 }

@@ -6,6 +6,8 @@ import com.leonde.seconddawn.dao.CreateShipDao;
 import com.leonde.seconddawn.dao.CreateShipOrderDao;
 import com.leonde.seconddawn.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
@@ -18,6 +20,7 @@ public class DefaultShipOrderService implements CreateShipOrderService{
 
 
     @Autowired
+    @Qualifier("createShipDao")
     CreateShipOrderDao createShipOrderDao;
     // TODO: 1/29/2022 Come back and delete createShipDao autowire if found to be obsolete.
 //    @Autowired

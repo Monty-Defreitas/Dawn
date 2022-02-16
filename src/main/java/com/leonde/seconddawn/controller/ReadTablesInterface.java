@@ -1,7 +1,9 @@
 package com.leonde.seconddawn.controller;
 
 
-import com.leonde.seconddawn.entity.*;
+import com.leonde.seconddawn.entity.Hulls;
+import com.leonde.seconddawn.entity.Shields;
+import com.leonde.seconddawn.entity.Weapons;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -10,11 +12,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 import java.util.List;
 
 @RequestMapping("/dawn/shipparts")
-@OpenAPIDefinition(info = @Info(title = "Ship components"), servers = { @Server(url = "http://localhost:8080", description = "Local Server.")})
+@OpenAPIDefinition(info = @Info(title = "Ship components"), servers = {@Server(url = "http://localhost:8080", description = "Local Server.")})
 public interface ReadTablesInterface {
 
     @Operation(summary = "Returns ship components for usage", description = " Returns the components",
