@@ -42,12 +42,34 @@ public class UpdateOrderDao extends CreateShipDao{
                 throw new NoSuchElementException("This order does not exist for update");
             }
 
+
         System.out.println(status);
 
         return DockOrder.builder().orderKey(identifier)
                 .weaponFk(weapons).shieldFk(shields)
                 .hullFk(hulls).parsecks(price).build();
     }
+
+
+    public Weapons updateWeapon(String orderId, Weapons weapons) {
+       String sql = " UPDATE dock_order set weapon_FK = :weapon_fk, some_key = :some_key";
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("some_key", orderId);
+        namedParameters.addValue("weapon_fk", weapons.getWeaponId());
+
+                int status = jdbcTemplate.update(sql,namedParameters);
+
+                if (status != 1){
+                    throw new NoSuchElementException("This order does not exist for update");
+                }
+
+        return Weapons.builder().weaponName(weapons.getWeaponName())
+                .weaponDamage(weapons.getWeaponDamage())
+                .energyRequirements(weapons.getEnergyRequirements())
+                .parsecks(weapons.getParsecks())
+                .build();
+    }
+
 
    public String deleteOrder(String orderId) {
 

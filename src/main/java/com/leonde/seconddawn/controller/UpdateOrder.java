@@ -1,8 +1,8 @@
 package com.leonde.seconddawn.controller;
 
 import com.leonde.seconddawn.entity.DockOrder;
-import com.leonde.seconddawn.entity.DockOrderRequest;
 import com.leonde.seconddawn.entity.UpdateDockOrder;
+import com.leonde.seconddawn.entity.Weapons;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/update")
+@RequestMapping("/second-dawn")
 @OpenAPIDefinition(info = @Info(title = "Update Dawn Order"), servers = { @Server(url = "http://localhost:8080", description = "Local Server.")})
 public interface UpdateOrder {
 
@@ -34,16 +34,16 @@ public interface UpdateOrder {
 //  @PutMapping ("/v1/{someKey}/{rowName}")
 //  DockOrder updateOrder(@PathVariable("someKey") String someKey, @PathVariable("rowName") String rowName);
 
-    @PutMapping ("/v1/updateOrder")
+    @PutMapping ("/v1/update-order")
     DockOrder updateOrder(@RequestBody UpdateDockOrder updateDockOrder);
 
-    @Operation(summary = "Returns completed message", description = " Returns the message",
-            parameters = {
-            @Parameter(name = "OrderID", allowEmptyValue = false,
-                    required = true,
-                    description = "The ID for which order you'd like to delete"),
-    })
 
+    @Operation(summary = "Returns completed message", description = " Returns the message")
+    @PutMapping("/v1/update-order/{orderId}/{weapon}")
+    Weapons updateWeapon(@PathVariable String weapon, @PathVariable String orderId);
+
+
+    @Operation(summary = "Returns completed message", description = " Returns the message")
      @DeleteMapping("/v1/{orderId}")
-    String deleteOrder(@PathVariable("orderId") String orderId);
+    String deleteOrder(@PathVariable String orderId);
 }

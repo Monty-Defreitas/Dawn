@@ -1,6 +1,5 @@
 package com.leonde.seconddawn.controller;
 
-
 import com.leonde.seconddawn.entity.Hulls;
 import com.leonde.seconddawn.entity.Shields;
 import com.leonde.seconddawn.entity.Weapons;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 
-@RequestMapping("/dawn/shipparts")
+@RequestMapping("/second-dawn/v1/ship-parts")
 @OpenAPIDefinition(info = @Info(title = "Ship components"), servers = {@Server(url = "http://localhost:8080", description = "Local Server.")})
 public interface ReadTablesInterface {
 

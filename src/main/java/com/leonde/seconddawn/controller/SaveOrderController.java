@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Validated
-@RequestMapping("/order")
+@RequestMapping("/second-dawn/v1/create-order")
 @OpenAPIDefinition(info = @Info(title = "Jeep Order Service"), servers = {@Server(url = "http://localhost:8080", description = "Local Server.")})
 
 public interface SaveOrderController {
@@ -40,16 +40,7 @@ public interface SaveOrderController {
                             content = @Content(mediaType = " Application/json")),
                     @ApiResponse(responseCode = "500",
                             description = "An unplanned error occured.",
-                            content = @Content(mediaType = " Application/json"))
-
-            },
-            parameters = {
-                    @Parameter(name = "OrderRequest", allowEmptyValue = true,
-                            required = true,
-                            description = "The order as JSON"),
-            }
-
-    )
+                            content = @Content(mediaType = " Application/json"))})
 
     @PostMapping("/ship")
     @ResponseStatus(code = HttpStatus.CREATED)

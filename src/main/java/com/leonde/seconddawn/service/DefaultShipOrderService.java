@@ -27,8 +27,6 @@ public class DefaultShipOrderService implements CreateShipOrderService{
 //    CreateShipDao createShipDao;
 
     @Transactional
-
-
     @Override
     public DockOrder createOrder(DockOrderRequest orderRequest) {
         Weapons weapons = getWeapons(orderRequest);

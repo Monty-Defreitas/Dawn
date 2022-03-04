@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@RequestMapping("/dawn")
+@RequestMapping("/second-dawn/v1/create-empire")
 @OpenAPIDefinition(info = @Info(title = "Create Dawn User"), servers = { @Server(url = "http://localhost:8080", description = "Local Server.")})
 public interface CreateEmpireController {
     // @formatter:off
@@ -33,14 +33,10 @@ public interface CreateEmpireController {
                             content = @Content(mediaType = " Application/json")),
                     @ApiResponse(responseCode = "500",
                             description = "An unplanned error occured.",
-                            content = @Content(mediaType = " Application/json"))},
-            parameters = {
-                    @Parameter(name = "CreateUser", allowEmptyValue = false,
-                            required = true,
-                            description = "The order as JSON")})
+                            content = @Content(mediaType = " Application/json"))})
 
 
-    @PostMapping("/empire")
+    @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     Empires registerEmpire(@RequestBody Empires createEmpire);
 
