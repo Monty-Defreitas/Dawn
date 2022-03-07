@@ -17,8 +17,16 @@ public class BaseTestSupport {
         return String.format("http://localhost:%d/orders", serverPort);
     }
 
+    protected String getBaseUriForOrders(String urlPath) {
+        return String.format("http://localhost:%d" + urlPath,serverPort);
+    }
+
     protected String getBaseUriForJeeps(){
         return String.format("http://localhost:%d/jeeps", serverPort);
+    }
+
+    protected TestRestTemplate getRestTemplate() {
+        return restTemplate;
     }
 
 }
