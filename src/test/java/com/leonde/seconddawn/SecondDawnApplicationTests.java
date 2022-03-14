@@ -2,13 +2,14 @@ package com.leonde.seconddawn;
 
 import com.leonde.seconddawn.entity.Empires;
 import com.leonde.seconddawn.support.BaseTestSupport;
+
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.jdbc.JdbcTestUtils;
@@ -19,9 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test") // allows us to override application.yaml properties.
 @Sql(scripts = {
-        "classpath:schemas/Second_Dawn.sql",
-        "classpath:schemas/second_dawn_data.sql"},
+        "classpath:Second_Dawn.sql",
+        "classpath:second_dawn_data.sql"},
         config = @SqlConfig(encoding = "utf-8"))
+@Slf4j
 class SecondDawnApplicationTests extends BaseTestSupport {
 
         @Autowired
@@ -50,15 +52,38 @@ class SecondDawnApplicationTests extends BaseTestSupport {
         assertThat(response.getBody()).isNotNull();
         Empires empire = response.getBody();
 
-        assertThat(empire.getEmpireName()).isEqualTo("Obiwan");
+        assertThat(empire.getEmpireName()).isEqualTo("Obi-wan");
         assertThat(empire.getSector()).isEqualTo("republic");
         assertThat(empire.getAlliance()).isEqualTo("Tano");
     }
 
-    public String createOrderBody() {
+    private String createOrderBody() {
         return "{ " +
-                "  \"empireName\":\"Obiwan\",\n " +
+                "  \"empireName\":\"Obi-wan\",\n " +
                 " \"sector\":\"republic\",\n" +
-                "  \"alliance\":\"Tano\"\n" + "}";
+                "  \"alliance\":\"cody\"\n" + "}";
     }
+
+    @Test
+    void testThatHashReturnsValueOtherThanGiven() {
+        String url = getBaseUriForOrders("/second-dawn/v1/create-empire");
+        String body = createOrderBody();
+
+          HttpHeaders httpHeaders = new HttpHeaders();
+
+          httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+          HttpEntity<String> bodyEntity = new HttpEntity<>(body,httpHeaders);
+
+          ResponseEntity<Empires> response = getRestTemplate().exchange(url,HttpMethod.POST,bodyEntity,Empires.class);
+
+          Empires sector = response.getBody();
+
+        assertThat(sector.getSector()).isEqualTo("republic");
+
+        log.debug("sector id:{} ", sector.getSector());
+
+
+    }
+
 }
