@@ -30,7 +30,7 @@ CREATE TABLE shields (
 CREATE TABLE empires (
                          empire_id int unsigned not null auto_increment,
                          empire_name varchar(30)not null unique,
-                         sector varchar(30) not null,
+                         sector varchar(65) not null,
                          alliance varchar(30) not null,
                          primary key (empire_id)
 );
@@ -55,22 +55,22 @@ CREATE TABLE missiles (
                           primary key (missile_id)
 );
 
-# CREATE TABLE species (
-#     species_pk int unsigned not null  AUTO_INCREMENT,
-#     species_id enum('descendants_of_draco', 'mechanema', 'orion_hegemony', 'hydran_progress', 'eridani_empire', 'planta'),
-#
-# );
-#
-# CREATE TABLE ships (
-#                         ship_pk int unsigned NOT NULL AUTO_INCREMENT,
-#                         ship_id enum('INTERCEPTOR', 'CRUISER', 'DREADNAUGHT', 'BASE') NOT NULL,
-#                         trim_level varchar(40) NOT NULL,
-#                         num_doors int NOT NULL,
-#                         wheel_size int NOT NULL,
-#                         base_price decimal(9, 2) NOT NULL,
-#                         PRIMARY KEY (ship_pk),
-#                         UNIQUE KEY (ship_id)
-# );
+--  CREATE TABLE species (
+--      species_pk int unsigned not null  AUTO_INCREMENT,
+--      species_id enum('descendants_of_draco', 'mechanema', 'orion_hegemony', 'hydran_progress', 'eridani_empire', 'planta'),
+--
+--  );
+--
+--  CREATE TABLE ships (
+--                          ship_pk int unsigned NOT NULL AUTO_INCREMENT,
+--                          ship_id enum('INTERCEPTOR', 'CRUISER', 'DREADNAUGHT', 'BASE') NOT NULL,
+--                          trim_level varchar(40) NOT NULL,
+--                         num_doors int NOT NULL,
+--                          wheel_size int NOT NULL,
+--                          base_price decimal(9, 2) NOT NULL,
+--                         PRIMARY KEY (ship_pk),
+--                          UNIQUE KEY (ship_id)
+--  );
 
 CREATE TABLE dock_order (
                             dock_id int unsigned not null auto_increment,
