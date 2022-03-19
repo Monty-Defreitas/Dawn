@@ -180,7 +180,6 @@ public class CreateShipDao implements CreateShipOrderDao {
         return Optional.ofNullable((jdbcTemplate.query(sql, params, new HullsResultSetExtractor())));
     }
 
-
     @Override
     public Optional<Shields> fetchShields(String shield_type) {
         // @formatter:off
@@ -195,7 +194,6 @@ public class CreateShipDao implements CreateShipOrderDao {
 
         return Optional.ofNullable(jdbcTemplate.query(sql, params, new ShieldsResultSetExtractor()));
     }
-
 
     @Override
     public Optional<Weapons> fetchWeapons(String weapon_name) {
@@ -213,12 +211,27 @@ public class CreateShipDao implements CreateShipOrderDao {
     }
 
 
+    public List<ReturnDockOrder> fetchOrders() {
+
+        String sql = "SELECT * FROM dock_order";
+
+        return jdbcTemplate.query(sql,((rs, rowNum) -> ReturnDockOrder.builder()
+                .dockPk(rs.getInt("dock_id"))
+                .orderKey(rs.getString("some_key"))
+                .weaponFk(rs.getString("weapon_FK"))
+                .shieldFk(rs.getString("shield_FK"))
+                .empireFk(rs.getString("empire_id"))
+                .hullFk(rs.getString("hull_id"))
+                .parsecks(rs.getBigDecimal("parsecks"))
+                .build()));
+    }
+
     public List<Weapons> fetchAllWeapons() {
 
         return jdbcTemplate.query(
                 "SELECT weapon_name, energy_requirements, weapon_damage, parsecks" +
                         " FROM weapons",
-                (rs, rowNum) -> Weapons.builder()
+                         (rs, rowNum) -> Weapons.builder()
                         .weaponName(rs.getString("weapon_name"))
                         .energyRequirements(rs.getInt("energy_Requirements"))
                         .parsecks(rs.getBigDecimal("parsecks"))
@@ -247,6 +260,17 @@ public class CreateShipDao implements CreateShipOrderDao {
                 .parsecks(rs.getBigDecimal("parsecks"))
                 .build()));
     }
+
+    public List<Missiles> fetchAllMissiles() {
+        return jdbcTemplate.query("SELECT missile_name,damage_output,energy_requirements,combat_speed" + " "
+        + "FROM missiles",((rs,rowNum) -> Missiles.builder().missileName(rs.getString("missile_name"))
+                .damageOutput(rs.getInt("damage_output"))
+                .energyRequirements(rs.getInt("energy_requirements"))
+                .combatSpeed(rs.getInt("combat_speed"))
+                .build()));
+    }
+
+
 
     class WeaponsResultSetExtractor implements ResultSetExtractor<Weapons> {
         @Override

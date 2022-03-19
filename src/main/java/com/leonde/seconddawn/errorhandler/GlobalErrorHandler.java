@@ -86,7 +86,7 @@ public class GlobalErrorHandler {
         error.put("timestamp", timestamp);
         error.put("reason", status.getReasonPhrase());
 
-        if (logStatus == logStatus.MESSAGE_ONLY) {
+        if (logStatus == LogStatus.MESSAGE_ONLY) {
             log.error("Exception: {}", e.toString());
         } else {
             log.error("Exception: ", e);

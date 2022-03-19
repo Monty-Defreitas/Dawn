@@ -1,8 +1,6 @@
 package com.leonde.seconddawn.controller;
 
-import com.leonde.seconddawn.entity.Hulls;
-import com.leonde.seconddawn.entity.Shields;
-import com.leonde.seconddawn.entity.Weapons;
+import com.leonde.seconddawn.entity.*;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -12,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -60,11 +59,11 @@ public interface ReadTablesInterface {
     @ResponseStatus(code = HttpStatus.OK)
     List<Hulls> readHullGoods();
 
+    @GetMapping("/missiles")
+    @ResponseStatus(code = HttpStatus.OK)
+    List<Missiles> readMissileGoods();
 
-//    @GetMapping("/json")
-//    @ResponseStatus(code = HttpStatus.ACCEPTED)
-//     default Map<String, Integer> getJson()  {
-//        return Map.of("number", 3);
-//    }
-
+    @GetMapping("/orders/{orderId}")
+    @ResponseStatus(code = HttpStatus.OK)
+    DockOrder readDockedOrders(@PathVariable String orderId);
 }

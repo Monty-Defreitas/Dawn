@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.validation.Valid;
+
 @Validated
 @RequestMapping("/second-dawn/v1/create-order")
 @OpenAPIDefinition(info = @Info(title = "Jeep Order Service"), servers = {@Server(url = "http://localhost:8080", description = "Local Server.")})
@@ -44,6 +46,6 @@ public interface SaveOrderController {
 
     @PostMapping("/ship")
     @ResponseStatus(code = HttpStatus.CREATED)
-    DockOrder createOrder(@RequestBody DockOrderRequest orderRequest);
+    DockOrder createOrder(@Valid @RequestBody DockOrderRequest orderRequest);
     // @formatter:on
 }

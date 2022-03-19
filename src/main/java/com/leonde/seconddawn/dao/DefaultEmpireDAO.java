@@ -8,18 +8,17 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import java.security.*;
 import java.util.Objects;
 
 @Component
 @Slf4j
-public class DefaultEmpireDAO implements CreateEmpireDao{
+public class DefaultEmpireDAO {
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     public Empires createEmpire(Empires empire){
-        try {
+
             SqlParams params = generateInsertEmpire(empire);
 
             KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -30,20 +29,15 @@ public class DefaultEmpireDAO implements CreateEmpireDao{
 
             return Empires.builder().empireId(Math.toIntExact(empirePK))
                     .empireName(empire.getEmpireName())
-                    .sector(params.source.getValue("sector").toString())
+                    .sector(empire.getSector())
                     .alliance(empire.getAlliance())
                     .build();
 
-            } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-            return null;
 
     }
 
 
-    private SqlParams generateInsertEmpire(Empires createEmpire) throws NoSuchAlgorithmException {
+    private SqlParams generateInsertEmpire(Empires createEmpire) {
 
         SqlParams params = new SqlParams();
 
@@ -55,7 +49,7 @@ public class DefaultEmpireDAO implements CreateEmpireDao{
                 + ":empire_name, :sector, :alliance)";
 
         params.source.addValue("empire_name",createEmpire.getEmpireName());
-        params.source.addValue("sector", hashCode(createEmpire.getSector()));
+        params.source.addValue("sector", createEmpire.getSector());
         params.source.addValue("alliance", createEmpire.getAlliance());
 
         return params;
@@ -68,21 +62,6 @@ public class DefaultEmpireDAO implements CreateEmpireDao{
         String sql;
         MapSqlParameterSource source = new MapSqlParameterSource();
     }
-     //Look into BCrypt
-    private StringBuilder hashCode(String sector) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        //Can also use MD5<--Dont use per Dr.Rob.
-        md.update(sector.getBytes());
 
-        byte[] result = md.digest();
-
-        StringBuilder sb = new StringBuilder();
-
-        for(byte b : result) {
-            sb.append(String.format("%02x",b));
-        }
-
-        return sb;
-    }
 
 }

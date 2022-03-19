@@ -13,8 +13,8 @@ public class BaseTestSupport {
     @LocalServerPort
     private int serverPort;
 
-    protected String getBaseUriForOrders(){
-        return String.format("http://localhost:%d/orders", serverPort);
+    protected String getBaseUriForOrdersEndPoint(String endPoint){
+        return String.format("http://localhost:%d/orders" + endPoint, serverPort);
     }
 
     protected String getBaseUriForOrders(String urlPath) {

@@ -7,8 +7,10 @@ import com.leonde.seconddawn.entity.UpdateDockOrder;
 import com.leonde.seconddawn.entity.Weapons;
 import com.leonde.seconddawn.service.UpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin("*")
 @RestController
 public class DefaultUpdateTable implements UpdateOrder{
 
@@ -18,18 +20,6 @@ public class DefaultUpdateTable implements UpdateOrder{
     @Autowired
     UpdateOrderDao updateOrderDao;
 
-
-
-//    @Override
-//    public DockOrder updateOrder(UpdateDockOrder someKey) {
-//        return updateOrderDao.updateAndReturnUpdate(someKey);
-//    }
-
-
-//    @Override
-//    public DockOrder updateOrder(String someKey, String rowName) {
-//        return null;
-//    }
 
     @Override
     public DockOrder updateOrder(UpdateDockOrder updateDockOrder) {

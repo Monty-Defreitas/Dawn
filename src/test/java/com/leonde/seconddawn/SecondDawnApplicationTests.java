@@ -64,26 +64,29 @@ class SecondDawnApplicationTests extends BaseTestSupport {
                 "  \"alliance\":\"cody\"\n" + "}";
     }
 
-    @Test
-    void testThatHashReturnsValueOtherThanGiven() {
-        String url = getBaseUriForOrders("/second-dawn/v1/create-empire");
-        String body = createOrderBody();
-
-          HttpHeaders httpHeaders = new HttpHeaders();
-
-          httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-
-          HttpEntity<String> bodyEntity = new HttpEntity<>(body,httpHeaders);
-
-          ResponseEntity<Empires> response = getRestTemplate().exchange(url,HttpMethod.POST,bodyEntity,Empires.class);
-
-          Empires sector = response.getBody();
-
-        assertThat(sector.getSector()).isEqualTo("republic");
-
-        log.debug("sector id:{} ", sector.getSector());
 
 
-    }
+//    @Test
+//    void testThatHashReturnsValueOtherThanGiven() {
+//        String url = getBaseUriForOrders("/second-dawn/v1/create-empire");
+//        String body = createOrderBody();
+//
+//          HttpHeaders httpHeaders = new HttpHeaders();
+//
+//          httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+//
+//          HttpEntity<String> bodyEntity = new HttpEntity<>(body,httpHeaders);
+//
+//          ResponseEntity<Empires> response = getRestTemplate().exchange(url,HttpMethod.POST,bodyEntity,Empires.class);
+//
+//          Empires sector = response.getBody();
+//
+//        assertThat(sector.getSector()).isEqualTo("republic");
+//
+//        log.debug("sector id:{} ", sector.getSector());
+//
+//
+//    }
+
 
 }

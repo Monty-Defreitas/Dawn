@@ -52,8 +52,10 @@ public class UpdateOrderDao extends CreateShipDao{
 
 
     public Weapons updateWeapon(String orderId, Weapons weapons) {
+
        String sql = " UPDATE dock_order set weapon_FK = :weapon_fk, some_key = :some_key";
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+
         namedParameters.addValue("some_key", orderId);
         namedParameters.addValue("weapon_fk", weapons.getWeaponId());
 
@@ -69,6 +71,45 @@ public class UpdateOrderDao extends CreateShipDao{
                 .parsecks(weapons.getParsecks())
                 .build();
     }
+
+    public Shields updateShield(String orderId, Shields shields) {
+
+        String sql = " UPDATE dock_order set shield_FK = :shield_fk, some_key = :some_key";
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("some_key", orderId);
+        namedParameters.addValue("shield_fk", shields.getShieldId());
+
+        int status = jdbcTemplate.update(sql,namedParameters);
+
+        if (status != 1){
+            throw new NoSuchElementException("This order does not exist for update");
+        }
+
+        return Shields.builder().shieldType(shields.getShieldType())
+                .build();
+    }
+
+    public Hulls updateHull(String orderId, Hulls hulls) {
+
+        String sql = " UPDATE dock_order set hull_id = :hull_id, some_key = :some_key";
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("some_key", orderId);
+        namedParameters.addValue("hull_id", hulls.getHullId());
+
+        int status = jdbcTemplate.update(sql,namedParameters);
+
+        if (status != 1){
+            throw new NoSuchElementException("This order does not exist for update");
+        }
+
+        return Hulls.builder().hullName(hulls.getHullName())
+                .hullResilience(hulls.getHullResilience())
+                .combatSpeed(hulls.getCombatSpeed())
+                .energyRequirements(hulls.getEnergyRequirements())
+                .parsecks(hulls.getParsecks())
+                .build();
+    }
+
 
 
    public String deleteOrder(String orderId) {
@@ -87,6 +128,7 @@ public class UpdateOrderDao extends CreateShipDao{
            throw new NoSuchElementException("No Order found with ID " + orderId);
         }
 }
+
        class SqlStuff {
        String sql;
        SqlParameterSource namedParameter;

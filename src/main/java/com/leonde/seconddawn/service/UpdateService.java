@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class UpdateService {
@@ -20,18 +19,16 @@ public class UpdateService {
         Weapons weapons = getWeapons(updateDockOrder);
         Shields shields = getShields(updateDockOrder);
         Hulls hulls = getHulls(updateDockOrder);
-//        Empires empires = getEmpires(updateDockOrder);
-//        List<Missiles> missiles = getMissiles(updateDockOrder);
-            String uuid = updateDockOrder.getOrderKey();
+        String uuid = updateDockOrder.getOrderKey();
         return updateOrderDao.updateAndReturnUpdate(uuid,weapons,shields,hulls);
     }
 
     public Weapons updateWeaponService(String orderId, String weapon) {
 
-       Weapons weaponname =  updateOrderDao.fetchWeapons(weapon)
+       Weapons weaponName =  updateOrderDao.fetchWeapons(weapon)
                .orElseThrow(() -> new NoSuchElementException("Model with ID=" + weapon));
 
-        return updateOrderDao.updateWeapon(orderId,weaponname);
+        return updateOrderDao.updateWeapon(orderId,weaponName);
     }
 
     private Hulls getHulls(UpdateDockOrder updateDockOrder) {
