@@ -1,5 +1,7 @@
 package com.leonde.seconddawn.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -12,27 +14,29 @@ import java.util.List;
 @Data
 @Validated
 @Builder
+
 public class DockOrderRequest {
 
     @NotNull
     @Length(max = 30)
-    @Pattern(regexp = "[^[A-Za-z]\\w\\s]*")
+    @Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
     private String empireName;
 
     @NotNull
     @Length(max = 30)
-    @Pattern(regexp = "[^[A-Za-z]\\w\\s]*")
+    @Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
     private String hullName;
 
     @NotNull
     @Length(max = 30)
-    @Pattern(regexp = "[^[A-Za-z]\\w\\s]*")
+    @Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
     private String shieldType;
 
     @NotNull
     @Length(max = 30)
-    @Pattern(regexp = "[^[A-Za-z]\\w\\s]*")
+    @Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
     private String weaponType;
 
-    private List<@NotNull @Length(max = 30) @Pattern(regexp = "[A-Z0-9_]*") String> missiles;
+
+    private List<@NotNull @Length(max = 200) String> missiles;
 }

@@ -20,19 +20,19 @@ public class DockOrder {
     private String orderKey;
     @NotNull
     @Length(max = 30)
-    @Pattern(regexp = "[^[A-Za-z]\\w\\s]*")
+
     private Empires empireFk;
     @NotNull
     @Length(max = 300)
-    @Pattern(regexp = "[^[A-Za-z]\\w\\s]*")
+    @Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
     private Weapons weaponFk;
     @NotNull
     @Length(max = 30)
-    @Pattern(regexp = "[^[A-Za-z]\\w\\s]*")
+    @Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
     private Shields shieldFk;
     @NotNull
     @Length(max = 30)
-    @Pattern(regexp = "[^[A-Za-z]\\w\\s]*")
+    @Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
     private Hulls hullFk;
     private List<Missiles> missileOptions;
     private BigDecimal parsecks;

@@ -17,17 +17,17 @@ public class UpdateDockOrder {
 
     @NotNull
     @Length(max = 30)
-    @Pattern(regexp = "[\\w\\s]*")
+    @Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
     private String hullName;
 
     @NotNull
     @Length(max = 30)
-    @Pattern(regexp = "[\\w\\s]*")
+    @Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
     private String shieldType;
 
     @NotNull
     @Length(max = 30)
-    @Pattern(regexp = "[\\w\\s]*")
+    @Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
     private String weaponType;
 
 }

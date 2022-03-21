@@ -18,14 +18,14 @@ public class Empires {
     int empireId;
     @NotNull
     @Length(max = 20)
-    @Pattern(regexp = "[^[A-Za-z]\\w\\s]*")
+    @Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
     String empireName;
     @NotNull
     @Length(max = 20)
-    @Pattern(regexp = "[^[A-Za-z]\\w\\s]*")
+    @Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
     String sector;
     @NotNull
     @Length(max = 20)
-    @Pattern(regexp = "[^[A-Za-z]\\w\\s]*")
+    @Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
     String alliance;
 }

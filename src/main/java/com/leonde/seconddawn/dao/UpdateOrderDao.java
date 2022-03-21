@@ -53,7 +53,7 @@ public class UpdateOrderDao extends CreateShipDao{
 
     public Weapons updateWeapon(String orderId, Weapons weapons) {
 
-       String sql = " UPDATE dock_order set weapon_FK = :weapon_fk, some_key = :some_key";
+       String sql = " UPDATE dock_order set weapon_FK = :weapon_fk  WHERE some_key = :some_key";
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
 
         namedParameters.addValue("some_key", orderId);
