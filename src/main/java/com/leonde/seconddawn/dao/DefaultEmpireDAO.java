@@ -17,6 +17,7 @@ public class DefaultEmpireDAO {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
+
     public Empires createEmpire(Empires empire){
 
             SqlParams params = generateInsertEmpire(empire);
@@ -32,8 +33,6 @@ public class DefaultEmpireDAO {
                     .sector(empire.getSector())
                     .alliance(empire.getAlliance())
                     .build();
-
-
     }
 
 
@@ -44,13 +43,15 @@ public class DefaultEmpireDAO {
         // @formatter:off
 
         params.sql = "INSERT INTO empires ("
-                + "empire_name, sector,alliance"
+                + "empire_name, sector,alliance,password"
                 + ") VALUES ("
-                + ":empire_name, :sector, :alliance)";
+                + ":empire_name, :sector, :alliance,:password)";
 
+        String newPassword = String.valueOf(createEmpire.getPassword().hashCode());
         params.source.addValue("empire_name",createEmpire.getEmpireName());
         params.source.addValue("sector", createEmpire.getSector());
         params.source.addValue("alliance", createEmpire.getAlliance());
+        params.source.addValue("password", newPassword);
 
         return params;
     }

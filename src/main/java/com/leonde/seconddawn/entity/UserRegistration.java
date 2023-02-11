@@ -1,6 +1,5 @@
 package com.leonde.seconddawn.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
@@ -13,23 +12,15 @@ import javax.validation.constraints.Pattern;
 @Data
 @Builder
 @Validated
-public class Empires {
+public class UserRegistration {
     @JsonIgnore
-    int empireId;
+    int userId;
     @NotNull
     @Length(max = 20)
-    @Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
-    String empireName;
+    //@Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
+    String username;
     @NotNull
     @Length(max = 20)
-    @Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
-    String sector;
-    @NotNull
-    @Length(max = 20)
-    @Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
-    String alliance;
-    @NotNull
-    @Length(max = 80)
-    @Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
+    //@Pattern(regexp = "^[^\s]+[-a-zA-Z\s]+([-a-zA-Z]+)*$")
     String password;
 }

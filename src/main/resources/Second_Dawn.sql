@@ -5,6 +5,14 @@ DROP TABLE IF EXISTS hulls;
 DROP TABLE IF EXISTS empires;
 DROP TABLE IF EXISTS shields;
 DROP TABLE IF EXISTS weapons;
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+                         user_id int  unsigned not null auto_increment,
+                         username varchar(20) not null,
+                         password varchar(30) not null,
+                         primary key (user_id)
+);
 
 CREATE TABLE weapons (
                          weapon_id int  unsigned not null auto_increment,
@@ -30,6 +38,7 @@ CREATE TABLE shields (
 CREATE TABLE empires (
                          empire_id int unsigned not null auto_increment,
                          empire_name varchar(30)not null unique,
+                         password varchar(64) not null,
                          sector varchar(65) not null,
                          alliance varchar(30) not null,
                          primary key (empire_id)

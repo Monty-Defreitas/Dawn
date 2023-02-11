@@ -1,6 +1,7 @@
 package com.leonde.seconddawn.dao;
 
 import com.leonde.seconddawn.entity.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -16,6 +17,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Component
+@Slf4j
 public class CreateShipDao implements CreateShipOrderDao {
 
     @Autowired
@@ -111,13 +113,13 @@ public class CreateShipDao implements CreateShipOrderDao {
         return params;
     }
 
-
     @Override
     public List<Missiles> fetchOptions(List<String> missileId) {
         if (missileId.isEmpty()) {
             return new LinkedList<>();
         }
-
+        var splitMissile = formatString(missileId);
+        var newMissiles = splitMissile.replace(" ","").split(",");
         Map<String, Object> params = new HashMap<>();
 
         // @formatter:off
@@ -127,13 +129,13 @@ public class CreateShipDao implements CreateShipOrderDao {
                 + "WHERE missile_name IN(";
         // @formatter:on
 
-        for (int index = 0; index < missileId.size(); index++) {
+        for (int index = 0; index < newMissiles.length; index++) {
             //122-123 line creates the Key for the Param Map
             String key = "missile_" + index;
             sql += ":" + key + ", ";
             //This line inserts a key: value pair into the map.
             // The Value is whatever Object is at the index of the param List.
-            params.put(key, missileId.get(index));
+            params.put(key, newMissiles[index]);
         }
         sql = sql.substring(0, sql.length() - 2);
         sql += ")";
@@ -147,6 +149,14 @@ public class CreateShipDao implements CreateShipOrderDao {
                 .build());
     }
 
+         private String formatString(List<String> missiles){
+            log.info("Missiles Entity ={}", missiles.size());
+            StringBuilder fillMe = new StringBuilder();
+            for (int index = 0; index < missiles.size(); index++) {
+                fillMe.append(missiles.get(index)).append(",");
+            }
+            return fillMe.toString();
+        }
     /**
      *
      */
@@ -210,7 +220,7 @@ public class CreateShipDao implements CreateShipOrderDao {
         return Optional.ofNullable(jdbcTemplate.query(sql, params, new WeaponsResultSetExtractor()));
     }
 
-
+        // TODO: Attach FetchOrders to front end allowing user to see their orders.
     public List<ReturnDockOrder> fetchOrders() {
 
         String sql = "SELECT * FROM dock_order";
@@ -269,8 +279,6 @@ public class CreateShipDao implements CreateShipOrderDao {
                 .combatSpeed(rs.getInt("combat_speed"))
                 .build()));
     }
-
-
 
     class WeaponsResultSetExtractor implements ResultSetExtractor<Weapons> {
         @Override

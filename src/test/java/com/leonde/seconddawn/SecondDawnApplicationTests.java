@@ -4,19 +4,21 @@ import com.leonde.seconddawn.entity.Empires;
 import com.leonde.seconddawn.support.BaseTestSupport;
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-//@TestPropertySource(locations="classpath:application-test.yaml")
+@TestPropertySource(locations="classpath:application-test.yaml")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test") // allows us to override application.yaml properties.
 @Sql(scripts = {
@@ -26,6 +28,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 class SecondDawnApplicationTests extends BaseTestSupport {
 
+    @Nested
+    class TestThatDoNotPolluteTheApplicationContext extends BaseTestSupport{
+
+    }
         @Autowired
         private JdbcTemplate jdbcTemplate;
 
